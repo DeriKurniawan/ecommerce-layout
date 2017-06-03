@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Demo Vue</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ msg }}</h1>
+      <h3 v-if="isLogin">Sudah Login</h3>
+      <h3 v-else-if="msg === 'bukan hello deri'">Belum Login</h3>
+      <h3 v-else>Yeahhh!!</h3>
+      <input type="text" name="" v-model:value="msg">
+      <input type="button" name="" v-bind:value="valueBtn">
+      <h1>List Students</h1>
+      <ul>
+        <li v-for="student in grayStudents">{{ student.name }} - {{ student.age }}</li>
+      </ul>
+      <h1>List Male</h1>
+      <ul>
+        <li v-for="student in maleStudents">{{ student.name }}</li>
+      </ul>
+      <h2>star wars</h2>
+      <button type="button" name="button" v-on:click="getStarWars()">Submit</button>
+      <ul>
+        <li v-for="starwars in starWarsHero">{{ starwars.name }}</li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#app',
+        data: {
+          msg: 'Hello Dery!',
+          valueBtn: 'Ini Button',
+          isLogin: true,
+          grayStudents:
+          [
+            { name:'zul', age: 25, gender: 'male'},
+            { name: 'lee', age: 25, gender: 'female'},
+            { name: 'see', age: 17, gender: 'male'}
+          ],
+          starWarsHero: [{
+            name: ''
+          }]
+        },
+        methods: {
+          getStarWars: function(){
+            var that = this
+            axios.get('http://swapi.co/api/people/')
+            .then(function(response){
+              console.log(response.data)
+              that.starWarsHero = response.data.results
+            })
+            .catch(function(err){
+              console.log(err)
+            })
+          }
+        },
+        computed: {
+          maleStudents: function() {
+            return this.grayStudents.filter(function(student){
+              return student.gender == 'male'
+            })
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
